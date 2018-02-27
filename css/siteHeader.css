@@ -1,0 +1,44 @@
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.siteHeader {
+  margin: 0;
+  padding: 0;
+  height: 60px;
+  background-color: #000540;
+  position: sticky;
+  top: 0;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  z-index: 200; /*To ensure that login would render infront of search bar*/
+}
+
+.siteLogoContainer {
+  float: left;
+}
+
+#siteLogo {
+  width: 150px;
+}
+
+.navItems {
+  width: 100px;
+  margin-left: 10px;
+  height: 100%;
+  line-height: 60px;
+  position: relative;
+  display: block;
+  color: white;
+  float: left;
+  text-align: center;
+}
+
+.navItems:hover {
+  background-color: blueviolet;
+}
+
+.navItems.active {
+  background-color: white;
+  color: orange;
+}

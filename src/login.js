@@ -1,6 +1,7 @@
 import React from "react";
 import { Redirect } from "react-router-dom";
-import "../public/login.css";
+import "../css/login.css";
+import axios from "axios";
 
 function LoginButton(props) {
   return (
@@ -40,8 +41,24 @@ class LoginForm extends React.Component {
     });
   }
 
-  handleSubmit() {
-    window
+  handleSubmit(event) {
+    axios
+      .post("/login", {
+        username: this.state.username,
+        password: this.state.password
+      })
+      .then(response => {
+        if (response && response.loggedIn == "yes") {
+          this.props.setLoggedIn();
+          console.log("Login successful");
+        } else {
+          console.log("Login failed");
+        }
+      })
+      .catch(error => {
+        console.log("Error in logging in. Error: " + error);
+      });
+    /*window
       .fetch("/login", {
         method: "POST",
         body: JSON.stringify({
@@ -59,14 +76,14 @@ class LoginForm extends React.Component {
         });
       })
       .then(result => {
-        if (result && result.success === "yes") {
-          <Redirect push to="/loggedin" />;
-          console.log("success");
+        if (result && result.loggedIn === "yes") {
+          this.props.setLoggedIn();
+          console.log("Login Successful");
         } else {
-          console.log("failure");
+          console.log("Login Failed");
         }
       })
-      .catch(error => console.log("error:", error));
+      .catch(error => console.log("error:", error));*/
     event.preventDefault();
     event.stopPropagation();
   }
@@ -77,7 +94,7 @@ class LoginForm extends React.Component {
         className={this.props.visible ? "loginBox visible" : "loginBox hidden"}
       >
         <h2>Login</h2>
-        <form>
+        <form onSubmit={this.handleSubmit}>
           <input
             className="formFields"
             type="text"
@@ -94,7 +111,7 @@ class LoginForm extends React.Component {
             placeholder="Password"
           />
           <br />
-          <input type="submit" value="Login" onClick={this.handleSubmit} />
+          <input type="submit" value="Login" />
         </form>
       </div>
     );
@@ -119,10 +136,15 @@ export class LoginApp extends React.Component {
     });
   }
 
-  closeLoginForm() {
-    this.setState({
-      loginFormVisible: false
-    });
+  closeLoginForm(e) {
+    if (
+      e.target.classList.contains("loginBoxContainer") &&
+      !e.target.classList.contains("loginBox")
+    ) {
+      this.setState({
+        loginFormVisible: false
+      });
+    }
   }
 
   render() {
